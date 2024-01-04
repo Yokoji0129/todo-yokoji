@@ -35,18 +35,24 @@ header {
 
 .search-box{
     text-align: center;
-    padding: 10px;
+    padding: 7px;
 }
 
 .search {
-    padding: 7px 200px 7px 5px;
+    padding: 10px 200px 10px 5px;
     border-radius: 10px;
     border: none;
+    transition: 0.3s;
+
 }
 
 .search:hover {
     background-color: #d4d2d2;
-    padding: 7px 202px 7px 7px;
+    transform: scale(1.02);
+}
+
+.search:focus {
+    outline: none;
 }
 
 .hamburger-icon,
@@ -55,28 +61,40 @@ header {
     background-size: contain;
     width: 50px;
     height: 50px;
-    background-image: url(../assets/burger.webp);
+    background-image: url(../assets/bars_hoso.png);
     align-self: flex-end;
     margin: 10px;
+    transition: 0.3s;
 }
 
+.hamburger-icon:hover,
+.hamburger-icon-menu:hover {
+    transform: scale(1.1);
+    transition: 0.3s ease;
+}
+
+.hamburger-icon:focus,
+.hamburger-icon-menu:focus {
+    outline: none;
+}
 nav {
     position: fixed;
-    top: 0;
+    top: 60px;
     left: -230px;
     height: 100vh;
     width: 300px;
-    background-color: #cfcdcd;
+    background-color: #d4d2d2;
     display: flex;
     flex-direction: column;
-    transition: left 0.3s ease;
+    transition: 0.3s;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
 }
 
 .nav-link {
     padding: 10px;
     text-decoration: none;
     color: black;
-    transition: background-color 0.3s ease;
+    transition: 0.3s;
 }
 
 .nav-link:hover {
@@ -91,7 +109,7 @@ nav {
 .open {
     left: 0;
     background-color: #ffffff;
-    transition: left 0.3s ease;
+    transition: 0.3s;
 }
 </style>
 
