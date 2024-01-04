@@ -1,4 +1,10 @@
-main{
+body {
+  margin: 0;
+  padding: 0;
+  background-color: #faf9f8;
+}
+
+main {
   margin: 10px 100px;
 }
 

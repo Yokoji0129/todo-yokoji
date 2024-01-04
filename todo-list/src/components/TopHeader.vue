@@ -15,9 +15,9 @@ const props = defineProps({
             <!--メニュー欄-->
             <nav :class="{ 'open': menuOpen }" @click="closeMenu">
                 <div class="hamburger-icon-menu" @click="toggleMenu()"></div>
-                <RouterLink to="/" class="nav-link"><img src="../assets/sun.png" class="img" width="15">今日の予定</RouterLink>
-                <RouterLink to="/important" class="nav-link"><img src="../assets/star.png" class="img" width="15">重要</RouterLink>
-                <RouterLink to="/plan" class="nav-link"><img src="../assets/calendar-blank.png" class="img" width="15">今後の予定</RouterLink>
+                <RouterLink to="/" class="nav-link"><img src="../assets/sun.png" class="img" width="15">今日の予定<span class="task-number">0</span></RouterLink>
+                <RouterLink to="/important" class="nav-link"><img src="../assets/star.png" class="img" width="15">重要<span class="task-number">0</span></RouterLink>
+                <RouterLink to="/plan" class="nav-link"><img src="../assets/calendar-blank.png" class="img" width="15">今後の予定<span class="task-number">0</span></RouterLink>
             </nav>
         </header>
     </div>
@@ -66,7 +66,7 @@ nav {
     left: -230px;
     height: 100vh;
     width: 300px;
-    background-color: #dfdddd;
+    background-color: #cfcdcd;
     display: flex;
     flex-direction: column;
     transition: left 0.3s ease;
@@ -81,6 +81,11 @@ nav {
 
 .nav-link:hover {
     background-color: #d4d2d2;
+}
+
+.task-number{
+    margin: 0 60px 0 0;
+    float: right;
 }
 
 .open {

@@ -16,9 +16,5 @@ const toggleMenu = () => {
 </template>
 
 <style>
-body {
-    margin: 0;
-    padding: 0;
-    background-color: #faf9f8;
-}
+
 </style>
