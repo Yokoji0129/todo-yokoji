@@ -1,4 +1,5 @@
 <script setup>
+import { ref } from 'vue'
 const props = defineProps({
   menuOpen: Boolean
 })
@@ -7,7 +8,7 @@ const props = defineProps({
 <template>
   <main :class="{ 'shift-right': menuOpen }">
     <div>
-      <h2>重要</h2>
+      <h2>タスク</h2>
     </div>
   </main>
 </template>

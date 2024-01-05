@@ -6,6 +6,14 @@ const props = defineProps({
 
 <template>
   <main :class="{ 'shift-right': menuOpen }">
-    今後の予定
+    <div>
+      <h2>今後の予定</h2>
+    </div>
   </main>
 </template>
+
+<style scoped>
+h2 {
+  margin: 0;
+}
+</style>

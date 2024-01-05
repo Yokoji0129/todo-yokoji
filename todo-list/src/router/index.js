@@ -19,6 +19,11 @@ const router = createRouter({
       name: 'plan',
       component: () => import('../views/PlanView.vue')
     },
+    {
+      path: '/all',
+      name: 'all',
+      component: () => import('../views/AllView.vue')
+    },
   ]
 })
 

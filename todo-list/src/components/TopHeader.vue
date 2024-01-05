@@ -8,34 +8,89 @@ const props = defineProps({
 <template>
     <div>
         <header>
-            <!--検索ボックス-->
-            <div class="search-box">
-                <input class="search" type="text" placeholder="検索">
+            <div class="top">
+                <!--画面左上のテキスト-->
+                <h3 class="header-text">ToDo</h3>
+                <!--検索ボックス-->
+                <div class="search-box">
+                    <input class="search" type="text" placeholder="検索">
+                </div>
             </div>
             <!--メニュー欄-->
             <nav :class="{ 'open': menuOpen }" @click="closeMenu">
+                <!--メニューアイコン-->
                 <div class="hamburger-icon-menu" @click="toggleMenu()"></div>
-                <RouterLink to="/" class="nav-link"><img src="../assets/sun.png" class="img" width="15">今日の予定<span class="task-number">0</span></RouterLink>
-                <RouterLink to="/important" class="nav-link"><img src="../assets/star.png" class="img" width="15">重要<span class="task-number">0</span></RouterLink>
-                <RouterLink to="/plan" class="nav-link"><img src="../assets/calendar-blank.png" class="img" width="15">今後の予定<span class="task-number">0</span></RouterLink>
+                <!--メニュー1-->
+                <RouterLink to="/" class="nav-link" :class="{ 'active-link': menuOpen && $route.path === '/' }">
+                    <!--バーガーメニューが開かれているときだけactive-link スタイル適応-->
+                    <img src="../assets/img/menu_ico/sun.png" class="img" width="15">
+                    今日の予定
+                    <span class="task-number">
+                        0
+                    </span>
+                </RouterLink>
+                <!--メニュー2-->
+                <RouterLink to="/important" class="nav-link"
+                    :class="{ 'active-link': menuOpen && $route.path === '/important' }">
+                    <img src="../assets/img/menu_ico/star.png" class="img" width="15">
+                    重要
+                    <span class="task-number">
+                        0
+                    </span>
+                </RouterLink>
+                <!--メニュー3-->
+                <RouterLink to="/plan" class="nav-link" :class="{ 'active-link': menuOpen && $route.path === '/plan' }">
+                    <img src="../assets/img/menu_ico/calendar-blank.png" class="img" width="15">
+                    今後の予定
+                    <span class="task-number">
+                        0
+                    </span>
+                </RouterLink>
+                <!--メニュー4-->
+                <RouterLink to="/all" class="nav-link" :class="{ 'active-link': menuOpen && $route.path === '/all' }">
+                    <img src="../assets/img/menu_ico/house.png" class="img" width="15">
+                    タスク
+                    <span class="task-number">
+                        0
+                    </span>
+                </RouterLink>
             </nav>
         </header>
     </div>
 </template>
   
-<style>
-.img{
+<style scoped>
+.active-link {
+    border-left: 2px solid #2564cf;
+    background-color: #eff6fc;
+    color: black;
+    /* アクティブなリンクのテキスト色 */
+}
+
+.img {
     margin: 0 10px;
     padding-top: 5px;
 }
+
 header {
     background-color: #2564cf;
     padding: 5px;
 }
 
-.search-box{
-    text-align: center;
-    padding: 7px;
+.top {
+    display: flex;
+    justify-content: space-between; /* 左右中央に配置 */
+    align-items: center; /* 上下中央に配置 */
+}
+
+.header-text {
+    margin-right: auto; /* 右寄せ */
+    color: white; /* テキストの色 */
+    margin: 10px;
+}
+
+.search-box {
+    margin: 0 20px;
 }
 
 .search {
@@ -43,11 +98,10 @@ header {
     border-radius: 10px;
     border: none;
     transition: 0.3s;
-
 }
 
 .search:hover {
-    background-color: #d4d2d2;
+    background-color: #ebebeb;
     transform: scale(1.02);
 }
 
@@ -61,7 +115,7 @@ header {
     background-size: contain;
     width: 50px;
     height: 50px;
-    background-image: url(../assets/bars_hoso.png);
+    background-image: url(../assets/img/menu_ico/bars_hoso.png);
     align-self: flex-end;
     margin: 10px;
     transition: 0.3s;
@@ -77,13 +131,14 @@ header {
 .hamburger-icon-menu:focus {
     outline: none;
 }
+
 nav {
     position: fixed;
-    top: 60px;
+    top: 58px;
     left: -230px;
     height: 100vh;
     width: 300px;
-    background-color: #d4d2d2;
+    background-color: #ebebeb;
     display: flex;
     flex-direction: column;
     transition: 0.3s;
@@ -98,10 +153,10 @@ nav {
 }
 
 .nav-link:hover {
-    background-color: #d4d2d2;
+    background-color: #ebebeb;
 }
 
-.task-number{
+.task-number {
     margin: 0 60px 0 0;
     float: right;
 }
@@ -112,4 +167,3 @@ nav {
     transition: 0.3s;
 }
 </style>
-

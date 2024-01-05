@@ -5,11 +5,12 @@ body {
 }
 
 main {
-  margin: 10px 100px;
+  margin: 20px 100px;
+  transition: 0.3s;
 }
 
 .shift-right {
-  margin-left: 320px;
+  margin-left: 330px;
   /* navが開いているときにmainを右に寄せる */
-  transition: margin-left 0.3s ease;
+  transition: 0.3s;
 }
