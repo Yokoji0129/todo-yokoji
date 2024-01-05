@@ -54,6 +54,14 @@ const props = defineProps({
                         0
                     </span>
                 </RouterLink>
+                <!--メニュー4-->
+                <p class="nav-link-dark">
+                    <img src="../assets/img/menu_ico/moon.png" class="img" width="15">
+                    ダークモード
+                    <label class="toggle-button-4">
+                        <input type="checkbox" />
+                    </label>
+                </p>
             </nav>
         </header>
     </div>
@@ -73,19 +81,27 @@ const props = defineProps({
 }
 
 header {
+    position: fixed;
+    top: 0;
+    width: 100%;
     background-color: #2564cf;
     padding: 5px;
+    z-index: 1000;
 }
 
 .top {
     display: flex;
-    justify-content: space-between; /* 左右中央に配置 */
-    align-items: center; /* 上下中央に配置 */
+    justify-content: space-between;
+    /* 左右中央に配置 */
+    align-items: center;
+    /* 上下中央に配置 */
 }
 
 .header-text {
-    margin-right: auto; /* 右寄せ */
-    color: white; /* テキストの色 */
+    margin-right: auto;
+    /* 右寄せ */
+    color: white;
+    /* テキストの色 */
     margin: 10px;
 }
 
@@ -134,7 +150,7 @@ header {
 
 nav {
     position: fixed;
-    top: 58px;
+    top: 60px;
     left: -230px;
     height: 100vh;
     width: 300px;
@@ -146,6 +162,13 @@ nav {
 }
 
 .nav-link {
+    padding: 10px;
+    text-decoration: none;
+    color: black;
+    transition: 0.3s;
+}
+
+.nav-link-dark {
     padding: 10px;
     text-decoration: none;
     color: black;
@@ -165,5 +188,60 @@ nav {
     left: 0;
     background-color: #ffffff;
     transition: 0.3s;
+}
+
+
+/**ここからダークモードボタン */
+
+.toggle-button-4 {
+    display: flex;
+    align-items: center;
+    position: relative;
+    width: 100px;
+    height: 50px;
+    border-radius: 50px;
+    box-sizing: content-box;
+    background-color: #ff8f8f33;
+    cursor: pointer;
+    transition: background-color .4s;
+}
+
+.toggle-button-4:has(:checked) {
+    background-color: #75bbff33;
+}
+
+.toggle-button-4::before {
+    position: absolute;
+    left: 5px;
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    background-color: #ff8f8f;
+    content: '';
+    transition: left .4s;
+}
+
+.toggle-button-4:has(:checked)::before {
+    left: 50px;
+    background-color: #75bbff;
+}
+
+.toggle-button-4::after {
+    position: absolute;
+    left: 26px;
+    transform: translateX(-50%);
+    color: #fff;
+    font-size: .9em;
+    content: 'off';
+    transition: left .4s;
+}
+
+.toggle-button-4:has(:checked)::after {
+    left: 71px;
+    content: 'on';
+}
+
+.toggle-button-4 input {
+    display: none;
 }
 </style>

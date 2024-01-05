@@ -11,6 +11,7 @@ const toggleMenu = () => {
 </script>
 
 <template>
+  <!--ヘッダー-->
   <TopHeader :toggleMenu="toggleMenu" :menuOpen="menuOpen" />
   <RouterView :menuOpen="menuOpen" />
 </template>
