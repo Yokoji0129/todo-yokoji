@@ -1,7 +1,8 @@
 <script setup>
 import { ref } from 'vue'
+import TodoText from '../components/TodoText.vue'
 const props = defineProps({
-  menuOpen: Boolean
+  menuOpen: Boolean,
 })
 </script>
 
@@ -10,6 +11,7 @@ const props = defineProps({
     <div>
       <h2>タスク</h2>
     </div>
+    <TodoText />
   </main>
 </template>
 

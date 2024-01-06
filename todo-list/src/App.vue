@@ -1,6 +1,6 @@
 <script setup>
 import { ref } from 'vue';
-import TopHeader from './components/TopHeader.vue'; // ヘッダー、メニューコンポーネント
+import TopHeader from './components/Header/TopHeader.vue'; // ヘッダー、メニューコンポーネント
 
 const menuOpen = ref(false);
 

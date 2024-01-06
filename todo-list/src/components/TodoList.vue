@@ -1,48 +1,29 @@
 <script setup>
 import { ref } from 'vue'
-const test = ref('もかぴとでーと')
+const props = defineProps({
+    todoList: Array,
+    todoListComp: Array,
+    addCompTodo: Function
+})
 </script>
 
 <template>
     <div>
-        <h3>未完了(6)</h3>
+        <h3>未完了({{ todoList.length }})</h3>
         <ul class="ul">
-            <li class="li">
-                <textarea class="textbox-3">{{ test }}</textarea>
-                <button class="btn">完了</button>
-            </li>
-            <li class="li">
-                <textarea class="textbox-3">{{ test }}</textarea>
-                <button class="btn">完了</button>
-            </li>
-            <li class="li">
-                <textarea class="textbox-3">{{ test }}</textarea>
-                <button class="btn">完了</button>
-            </li>
-            <li class="li">
-                <textarea class="textbox-3">{{ test }}</textarea>
-                <button class="btn">完了</button>
-            </li>
-            <li class="li">
-                <textarea class="textbox-3">{{ test }}</textarea>
-                <button class="btn">完了</button>
-            </li>
-            <li class="li">
-                <textarea class="textbox-3">{{ test }}</textarea>
-                <button class="btn">完了</button>
+            <li class="li" v-for="(todo, i) in todoList" :key="i">
+                <textarea class="textbox-3">{{ todo }}</textarea>
+                <button class="btn" @click="addCompTodo(todo)">完了</button>
+                <button class="btn-delete">削除</button>
             </li>
         </ul>
     </div>
 
     <div>
-        <h3 class="h3">完了済み(2)</h3>
+        <h3 class="h3">完了済み({{ todoListComp.length }})</h3>
         <ul class="ul">
-            <li class="li">
-                <textarea class="textbox-3">{{ test }}</textarea>
-                <button class="btn-delete">削除</button>
-            </li>
-            <li class="li">
-                <textarea class="textbox-3">{{ test }}</textarea>
+            <li class="li" v-for="(todoComp, i) in todoListComp" :key="i">
+                <textarea class="textbox-3">{{ todoComp }}</textarea>
                 <button class="btn-delete">削除</button>
             </li>
         </ul>
@@ -87,7 +68,7 @@ ul li{
     background-color: rgb(219, 165, 165);
 }
 .textbox-3 {
-    width: 90%;
+    width: 100%;
     padding: 8px 10px;
     border: none;
     border-radius: 3px;

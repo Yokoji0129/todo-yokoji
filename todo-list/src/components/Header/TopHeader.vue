@@ -23,7 +23,7 @@ const props = defineProps({
                 <!--メニュー1-->
                 <RouterLink to="/" class="nav-link" :class="{ 'active-link': menuOpen && $route.path === '/' }">
                     <!--バーガーメニューが開かれているときだけactive-link スタイル適応-->
-                    <img src="../assets/img/menu_ico/sun.png" class="img" width="15">
+                    <img src="../../assets/img/menu_ico/sun.png" class="img" width="15">
                     今日の予定
                     <span class="task-number">
                         0
@@ -32,7 +32,7 @@ const props = defineProps({
                 <!--メニュー2-->
                 <RouterLink to="/important" class="nav-link"
                     :class="{ 'active-link': menuOpen && $route.path === '/important' }">
-                    <img src="../assets/img/menu_ico/star.png" class="img" width="15">
+                    <img src="../../assets/img/menu_ico/star.png" class="img" width="15">
                     重要
                     <span class="task-number">
                         0
@@ -40,7 +40,7 @@ const props = defineProps({
                 </RouterLink>
                 <!--メニュー3-->
                 <RouterLink to="/plan" class="nav-link" :class="{ 'active-link': menuOpen && $route.path === '/plan' }">
-                    <img src="../assets/img/menu_ico/calendar-blank.png" class="img" width="15">
+                    <img src="../../assets/img/menu_ico/calendar-blank.png" class="img" width="15">
                     今後の予定
                     <span class="task-number">
                         0
@@ -48,20 +48,12 @@ const props = defineProps({
                 </RouterLink>
                 <!--メニュー4-->
                 <RouterLink to="/all" class="nav-link" :class="{ 'active-link': menuOpen && $route.path === '/all' }">
-                    <img src="../assets/img/menu_ico/house.png" class="img" width="15">
+                    <img src="../../assets/img/menu_ico/house.png" class="img" width="15">
                     タスク
                     <span class="task-number">
                         0
                     </span>
                 </RouterLink>
-                <!--メニュー4-->
-                <p class="nav-link-dark">
-                    <img src="../assets/img/menu_ico/moon.png" class="img" width="15">
-                    ダークモード
-                    <label class="toggle-button-4">
-                        <input type="checkbox" />
-                    </label>
-                </p>
             </nav>
         </header>
     </div>
@@ -131,7 +123,7 @@ header {
     background-size: contain;
     width: 50px;
     height: 50px;
-    background-image: url(../assets/img/menu_ico/bars_hoso.png);
+    background-image: url(../../assets/img/menu_ico/bars_hoso.png);
     align-self: flex-end;
     margin: 10px;
     transition: 0.3s;
@@ -188,60 +180,5 @@ nav {
     left: 0;
     background-color: #ffffff;
     transition: 0.3s;
-}
-
-
-/**ここからダークモードボタン */
-
-.toggle-button-4 {
-    display: flex;
-    align-items: center;
-    position: relative;
-    width: 100px;
-    height: 50px;
-    border-radius: 50px;
-    box-sizing: content-box;
-    background-color: #ff8f8f33;
-    cursor: pointer;
-    transition: background-color .4s;
-}
-
-.toggle-button-4:has(:checked) {
-    background-color: #75bbff33;
-}
-
-.toggle-button-4::before {
-    position: absolute;
-    left: 5px;
-    width: 42px;
-    height: 42px;
-    border-radius: 50%;
-    background-color: #ff8f8f;
-    content: '';
-    transition: left .4s;
-}
-
-.toggle-button-4:has(:checked)::before {
-    left: 50px;
-    background-color: #75bbff;
-}
-
-.toggle-button-4::after {
-    position: absolute;
-    left: 26px;
-    transform: translateX(-50%);
-    color: #fff;
-    font-size: .9em;
-    content: 'off';
-    transition: left .4s;
-}
-
-.toggle-button-4:has(:checked)::after {
-    left: 71px;
-    content: 'on';
-}
-
-.toggle-button-4 input {
-    display: none;
 }
 </style>
