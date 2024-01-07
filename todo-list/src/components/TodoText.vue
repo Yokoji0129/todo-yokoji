@@ -11,7 +11,7 @@ const loadTodoListFromLocalStorage = () => {
   if (storedTodoList) {
     todoList.value = JSON.parse(storedTodoList)
   }
-  
+
   const storedTodoListComp = localStorage.getItem('todoListComp')
   if (storedTodoListComp) {
     todoListComp.value = JSON.parse(storedTodoListComp)
@@ -27,6 +27,7 @@ const saveTodoListCompToLocalStorage = () => {
   localStorage.setItem('todoListComp', JSON.stringify(todoListComp.value))
 }
 
+// todoを追加するメソッド
 const addTodo = () => {
   if (searchTerm.value) {
     todoList.value.push(searchTerm.value)
@@ -37,6 +38,7 @@ const addTodo = () => {
   }
 }
 
+// todoを完了させるメソッド
 const addCompTodo = (todo) => {
   // 未完了リストから完了したものを削除(itemがtodoと異なるものを削除)
   todoList.value = todoList.value.filter(item => item !== todo)
@@ -48,6 +50,26 @@ const addCompTodo = (todo) => {
   saveTodoListCompToLocalStorage()
 }
 
+// 完了済みから未完了にtodoを移動させる
+const addInCompTodo = (todo) => {
+  todoListComp.value = todoListComp.value.filter(item => item !== todo);
+  todoList.value.push(todo)
+  saveTodoListToLocalStorage()
+  saveTodoListCompToLocalStorage()
+}
+
+// 未完了todoから削除
+const deleteTodo = (index) => {
+  todoList.value.splice(index, 1)
+  saveTodoListToLocalStorage()
+}
+
+// 完了済みtodoから削除
+const deleteTodoComp = (index) => {
+  todoListComp.value.splice(index, 1)
+  saveTodoListCompToLocalStorage()
+}
+
 // コンポーネントがマウントされた時にローカルストレージからデータを読み込む
 onMounted(() => {
   loadTodoListFromLocalStorage()
@@ -56,10 +78,11 @@ onMounted(() => {
 
 <template>
   <div class="text">
-    <input type="text" class="textbox-1" placeholder="タスクの追加" v-model="searchTerm" />
+    <input type="text" class="textbox-1" placeholder="タスクの追加" v-model="searchTerm" @keyup.enter="addTodo" />
     <button class="btn" @click="addTodo()">add</button>
   </div>
-  <TodoList :todoList="todoList" :addCompTodo="addCompTodo" :todoListComp="todoListComp" />
+  <TodoList :todoList="todoList" :addCompTodo="addCompTodo" :deleteTodo="deleteTodo" :todoListComp="todoListComp"
+    :deleteTodoComp="deleteTodoComp" :addInCompTodo="addInCompTodo" />
 </template>
 
 <style scoped>
