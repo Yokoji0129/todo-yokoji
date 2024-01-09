@@ -1,9 +1,10 @@
 <script setup>
 import TodoList from "../components/TodoList.vue";
-import { ref, onMounted } from "vue";
+import { ref, computed } from "vue";
 const searchTerm = ref("");
-const todoList = ref([]);
-const todoListComp = ref([]);
+const newTodo = ref(""); // todoを追加する文字入れ
+const todoList = ref([]); // todoを追加するときの配列
+const todoListComp = ref([]); // 完了済みtodoを入れる配列
 
 // ローカルストレージにデータを保存する
 const saveTodoListToLocalStorage = () => {
@@ -16,9 +17,9 @@ const saveTodoListCompToLocalStorage = () => {
 
 // todoを追加するメソッド
 const addTodo = () => {
-  if (searchTerm.value) {
-    todoList.value.push(searchTerm.value);
-    searchTerm.value = "";
+  if (newTodo.value) {
+    todoList.value.push(newTodo.value);
+    newTodo.value = "";
     saveTodoListToLocalStorage();
   } else {
     window.alert("todoを入力してください");
@@ -34,27 +35,53 @@ const updateTodoListComp = (updatedList) => {
   todoListComp.value = updatedList;
   saveTodoListCompToLocalStorage();
 };
+
+// フィルタリングされた未完了todoリスト
+const filteredTodoList = computed(() => {
+  return todoList.value.filter((todo) =>
+    todo.toLowerCase().includes(searchTerm.value.toLowerCase())
+  );
+});
+
+// フィルタリングされた完了済みtodoリスト
+const filteredTodoCompList = computed(() => {
+  return todoListComp.value.filter((todo) =>
+    todo.toLowerCase().includes(searchTerm.value.toLowerCase())
+  );
+});
 </script>
 
 <template>
+  <!--検索ボックス-->
+  <div class="search-box">
+    <input
+      class="search"
+      type="text"
+      placeholder="検索"
+      v-model="searchTerm"
+    />
+  </div>
   <div class="text">
     <input
       type="text"
       class="textbox-1"
       placeholder="タスクの追加"
-      v-model="searchTerm"
+      v-model="newTodo"
       @keyup.enter="addTodo"
     />
     <!--文字が入力されている場合cursor: pointer 入力されていない場合 cursor: not-alloweb-->
     <button
       class="btn"
-      :style="{ cursor: searchTerm ? 'pointer' : 'not-allowed' }"
+      :style="{ cursor: newTodo ? 'pointer' : 'not-allowed' }"
       @click="addTodo()"
     >
       add
     </button>
   </div>
   <TodoList
+    :searchTerm="searchTerm"
+    :filteredTodoCompList="filteredTodoCompList"
+    :filteredTodoList="filteredTodoList"
     :todoList="todoList"
     :todoListComp="todoListComp"
     :saveTodoListToLocalStorage="saveTodoListToLocalStorage"
@@ -65,6 +92,25 @@ const updateTodoListComp = (updatedList) => {
 </template>
 
 <style scoped>
+.search-box {
+  margin: 5px 0;
+}
+
+.search {
+  padding: 10px 200px 10px 5px;
+  border-radius: 10px;
+  border: none;
+  transition: 0.3s;
+}
+
+.search:hover {
+  background-color: #ebebeb;
+  transform: scale(1.02);
+}
+
+.search:focus {
+  outline: none;
+}
 .text {
   margin-top: 60px;
   display: flex;

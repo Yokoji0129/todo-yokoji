@@ -11,10 +11,6 @@ const props = defineProps({
             <div class="top">
                 <!--画面左上のテキスト-->
                 <h3 class="header-text">ToDo</h3>
-                <!--検索ボックス-->
-                <div class="search-box">
-                    <input class="search" type="text" placeholder="検索">
-                </div>
             </div>
             <!--メニュー欄-->
             <nav :class="{ 'open': menuOpen }" @click="closeMenu">
@@ -97,25 +93,6 @@ header {
     margin: 10px;
 }
 
-.search-box {
-    margin: 0 20px;
-}
-
-.search {
-    padding: 10px 200px 10px 5px;
-    border-radius: 10px;
-    border: none;
-    transition: 0.3s;
-}
-
-.search:hover {
-    background-color: #ebebeb;
-    transform: scale(1.02);
-}
-
-.search:focus {
-    outline: none;
-}
 
 .hamburger-icon,
 .hamburger-icon-menu {

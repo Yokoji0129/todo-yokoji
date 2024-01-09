@@ -2,6 +2,9 @@
 import { ref, defineProps, defineEmits, watch, onMounted } from "vue";
 
 const props = defineProps({
+  searchTerm: String,
+  filteredTodoCompList: Array,
+  filteredTodoList: Array,
   todoList: Array,
   todoListComp: Array,
   saveTodoListToLocalStorage: Function,
@@ -37,7 +40,9 @@ const addCompTodo = (todo) => {
 
 // 完了済みから未完了にtodoを移動させる
 const addInCompTodo = (todo) => {
-  localTodoListComp.value = localTodoListComp.value.filter((item) => item !== todo);
+  localTodoListComp.value = localTodoListComp.value.filter(
+    (item) => item !== todo
+  );
   localTodoList.value.push(todo);
   saveTodoListToLocalStorage();
   saveTodoListCompToLocalStorage();
@@ -82,33 +87,43 @@ onMounted(() => {
 
 
 <template>
-  <h1 v-if="localTodoList.length === 0 && localTodoListComp.length === 0">
-    ToDoを追加してください
-  </h1>
-  <div>
-    <h3 v-if="localTodoList.length">未完了({{ localTodoList.length }})</h3>
-    <ul class="ul">
-      <li class="li" v-for="(todo, i) in localTodoList" :key="i">
-        <p class="heading-23">{{ todo }}</p>
-        <button class="btn" @click="addCompTodo(todo)">完了</button>
-        <button class="btn-delete" @click="deleteTodo(i)">削除</button>
-      </li>
-    </ul>
+  <div v-if="searchTerm.length">
+    <h1>{{ searchTerm }} を検索中</h1>
   </div>
-
+  <div
+    v-if="searchTerm.length && filteredTodoList.length === 0 && filteredTodoCompList.length === 0"
+  >
+    <h1 class="h1">検索結果なし</h1>
+  </div>
   <div>
-    <h3 class="h3" v-if="localTodoListComp.length">
-      完了済み({{ localTodoListComp.length }})
-    </h3>
-    <ul class="ul">
-      <li class="li" v-for="(todoComp, i) in localTodoListComp" :key="i">
-        <p class="heading-23">{{ todoComp }}</p>
-        <button class="btn-incomp" @click="addInCompTodo(todoComp)">
-          未完
-        </button>
-        <button class="btn-delete" @click="deleteTodoComp(i)">削除</button>
-      </li>
-    </ul>
+    <h1 v-if="searchTerm.length === 0 && localTodoList.length === 0 && localTodoListComp.length === 0">
+      ToDoを追加してください
+    </h1>
+    <div>
+      <h3 v-if="localTodoList.length">未完了({{ localTodoList.length }})</h3>
+      <ul class="ul">
+        <li class="li" v-for="(todo, i) in filteredTodoList" :key="i">
+          <p class="heading-23">{{ todo }}</p>
+          <button class="btn" @click="addCompTodo(todo)">完了</button>
+          <button class="btn-delete" @click="deleteTodo(i)">削除</button>
+        </li>
+      </ul>
+    </div>
+
+    <div>
+      <h3 class="h3" v-if="localTodoListComp.length">
+        完了済み({{ localTodoListComp.length }})
+      </h3>
+      <ul class="ul">
+        <li class="li" v-for="(todoComp, i) in filteredTodoCompList" :key="i">
+          <p class="heading-23">{{ todoComp }}</p>
+          <button class="btn-incomp" @click="addInCompTodo(todoComp)">
+            未完
+          </button>
+          <button class="btn-delete" @click="deleteTodoComp(i)">削除</button>
+        </li>
+      </ul>
+    </div>
   </div>
 </template>
 
@@ -122,6 +137,11 @@ onMounted(() => {
   color: #333333;
 }
 h1 {
+  text-align: center;
+}
+.h1 {
+  color: #2589d0;
+  background-color: #f2f2f2;
   text-align: center;
 }
 p {
