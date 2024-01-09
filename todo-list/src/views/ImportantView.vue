@@ -2,6 +2,7 @@
 const props = defineProps({
   menuOpen: Boolean
 })
+import TodoText from '../components/TodoText.vue'; // テキスト入力コンポーネント
 </script>
 
 <template>
@@ -9,6 +10,7 @@ const props = defineProps({
     <div>
       <h2>重要</h2>
     </div>
+    <TodoText />
   </main>
 </template>
 

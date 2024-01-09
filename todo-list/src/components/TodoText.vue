@@ -5,6 +5,7 @@ const searchTerm = ref("");
 const newTodo = ref(""); // todoを追加する文字入れ
 const todoList = ref([]); // todoを追加するときの配列
 const todoListComp = ref([]); // 完了済みtodoを入れる配列
+const selectDate = ref("");
 
 // ローカルストレージにデータを保存する
 const saveTodoListToLocalStorage = () => {
@@ -18,9 +19,16 @@ const saveTodoListCompToLocalStorage = () => {
 // todoを追加するメソッド
 const addTodo = () => {
   if (newTodo.value) {
-    todoList.value.push(newTodo.value);
-    newTodo.value = "";
-    saveTodoListToLocalStorage();
+    // 期日を入れた時と入れないときの分岐
+    if (selectDate.value) {
+      todoList.value.push("期日: " + selectDate.value + "　" + newTodo.value);
+      newTodo.value = "";
+      saveTodoListToLocalStorage();
+    } else {
+      todoList.value.push(newTodo.value);
+      newTodo.value = "";
+      saveTodoListToLocalStorage();
+    }
   } else {
     window.alert("todoを入力してください");
   }
@@ -54,12 +62,7 @@ const filteredTodoCompList = computed(() => {
 <template>
   <!--検索ボックス-->
   <div class="search-box">
-    <input
-      class="search"
-      type="text"
-      placeholder="検索"
-      v-model="searchTerm"
-    />
+    <input class="search" type="text" placeholder="検索" v-model="searchTerm" />
   </div>
   <div class="text">
     <input
@@ -78,6 +81,7 @@ const filteredTodoCompList = computed(() => {
       add
     </button>
   </div>
+  <input type="date" v-model="selectDate" />
   <TodoList
     :searchTerm="searchTerm"
     :filteredTodoCompList="filteredTodoCompList"

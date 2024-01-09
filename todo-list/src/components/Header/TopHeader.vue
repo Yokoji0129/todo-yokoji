@@ -137,13 +137,6 @@ nav {
     transition: 0.3s;
 }
 
-.nav-link-dark {
-    padding: 10px;
-    text-decoration: none;
-    color: black;
-    transition: 0.3s;
-}
-
 .nav-link:hover {
     background-color: #ebebeb;
 }
