@@ -22,7 +22,6 @@ const memos = ref({}); // メモをオブジェクトで保存させる
 
 const saveMemoToLocalStorage = () => {
   localStorage.setItem("memos", JSON.stringify(memos.value));
-  window.alert('メモが保存されました')
 };
 
 // ローカルストレージからメモを読み込む
@@ -206,13 +205,21 @@ const toggleMenuComp = (todoComp) => {
               v-model="memos[todo]"
               @keyup.enter="saveMemoToLocalStorage(todo)"
             />
-            <button @click="saveMemoToLocalStorage(todo)" style="cursor: pointer;">メモを保存</button>
+            <button
+              @click="saveMemoToLocalStorage(todo)"
+              style="cursor: pointer"
+            >
+              メモを保存
+            </button>
             <button
               class="menu-comp-btn"
               @click="addCompTodo(todo)"
               @click.stop=""
             >
               完了
+            </button>
+            <button class="menu-btn-delete" @click="deleteTodo(i)" @click.stop="">
+              削除
             </button>
           </nav>
         </li>
@@ -264,6 +271,13 @@ const toggleMenuComp = (todoComp) => {
               @click.stop=""
             >
               未完了に戻す
+            </button>
+            <button
+              class="menu-btn-delete"
+              @click="deleteTodoComp(i)"
+              @click.stop=""
+            >
+              削除
             </button>
           </nav>
         </li>
@@ -400,17 +414,34 @@ ul li {
 }
 
 .menu-comp-btn {
-  margin: 15px 0;
+  margin: 15px 0 0 0;
   padding: 10px;
   background-color: rgb(197, 255, 192);
   border: none;
   cursor: pointer;
 }
+.menu-comp-btn:hover {
+  background-color: rgb(167, 213, 163);
+}
 .menu-incomp-btn {
-  margin: 15px 0;
+  margin: 15px 0 0 0;
   padding: 10px;
   background-color: rgb(192, 217, 255);
   border: none;
   cursor: pointer;
+}
+.menu-incomp-btn:hover {
+  background-color: rgb(166, 188, 220);
+}
+
+.menu-btn-delete {
+  margin: 15px 0 0 0;
+  padding: 10px;
+  background-color: rgb(255, 192, 192);
+  border: none;
+  cursor: pointer;
+}
+.menu-btn-delete:hover {
+  background-color: rgb(219, 165, 165);
 }
 </style>
