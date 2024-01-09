@@ -11,22 +11,46 @@ const props = defineProps({
   saveTodoListCompToLocalStorage: Function,
 });
 
+// memoをデータに保存
 const emits = defineEmits(["updateTodoList", "updateTodoListComp"]);
 
-// ref を使用してローカルな変数を作成
+// ローカルな変数を作成して子コンポーネントで操作できるように変更
 const localTodoList = ref(props.todoList);
 const localTodoListComp = ref(props.todoListComp);
 
+const memos = ref({}); // メモをオブジェクトで保存させる
+
+const saveMemoToLocalStorage = () => {
+  localStorage.setItem("memos", JSON.stringify(memos.value));
+  window.alert('メモが保存されました')
+};
+
+// ローカルストレージからメモを読み込む
+const loadMemoFromLocalStorage = () => {
+  const storedMemos = localStorage.getItem("memos");
+  if (storedMemos) {
+    memos.value = JSON.parse(storedMemos);
+  }
+};
+
 // ローカルストレージからデータを読み込む
 const loadTodoListFromLocalStorage = () => {
+  // 未完了データ
   const storedTodoList = localStorage.getItem("todoList");
   if (storedTodoList) {
     localTodoList.value = JSON.parse(storedTodoList);
   }
 
+  // 完了済みデータ
   const storedTodoListComp = localStorage.getItem("todoListComp");
   if (storedTodoListComp) {
     localTodoListComp.value = JSON.parse(storedTodoListComp);
+  }
+
+  // メモデータ
+  const storedMemos = localStorage.getItem("memos");
+  if (storedMemos) {
+    memos.value = JSON.parse(storedMemos);
   }
 };
 
@@ -50,14 +74,26 @@ const addInCompTodo = (todo) => {
 
 // 未完了todoから削除
 const deleteTodo = (index) => {
+  const deletedTodo = localTodoList.value[index];
   localTodoList.value.splice(index, 1);
+  deleteMemo(deletedTodo); // ToDoが削除されたらメモも削除
   saveTodoListToLocalStorage();
 };
 
 // 完了済みtodoから削除
 const deleteTodoComp = (index) => {
+  const deletedTodo = localTodoListComp.value[index];
   localTodoListComp.value.splice(index, 1);
+  deleteMemo(deletedTodo); // ToDoが削除されたらメモも削除
   saveTodoListCompToLocalStorage();
+};
+
+// メモを削除するメソッド
+const deleteMemo = (todo) => {
+  if (memos.value.hasOwnProperty(todo)) {
+    delete memos.value[todo];
+    saveMemoToLocalStorage();
+  }
 };
 
 // ローカルストレージに未完了todoを保存
@@ -83,6 +119,7 @@ watch(localTodoListComp, (newValue) => {
 // コンポーネントがマウントされた時にローカルストレージからデータを読み込む
 onMounted(() => {
   loadTodoListFromLocalStorage();
+  loadMemoFromLocalStorage();
 });
 
 const menus = ref({}); // 各ToDoアイテムごとのメニューを保持するオブジェクト
@@ -150,15 +187,33 @@ const toggleMenuComp = (todoComp) => {
           @click="toggleMenu(todo)"
         >
           <p class="heading-23">{{ todo }}</p>
-          <button class="btn" @click="addCompTodo(todo)" @click.stop="">完了</button>
-          <button class="btn-delete" @click="deleteTodo(i)" @click.stop="">削除</button>
+          <button class="btn" @click="addCompTodo(todo)" @click.stop="">
+            完了
+          </button>
+          <button class="btn-delete" @click="deleteTodo(i)" @click.stop="">
+            削除
+          </button>
           <!-- ToDoアイテムごとに異なるメニュー -->
           <nav :class="{ open: menus[todo] }" @click.stop="">
             <h1 class="close-h1" @click="toggleMenu(todo)">閉じる</h1>
             <li>
               <p class="p">{{ todo }}</p>
             </li>
-            <input class="memo" type="textearea" placeholder="メモの追加">
+            <input
+              class="memo"
+              type="textearea"
+              placeholder="メモの追加"
+              v-model="memos[todo]"
+              @keyup.enter="saveMemoToLocalStorage(todo)"
+            />
+            <button @click="saveMemoToLocalStorage(todo)" style="cursor: pointer;">メモを保存</button>
+            <button
+              class="menu-comp-btn"
+              @click="addCompTodo(todo)"
+              @click.stop=""
+            >
+              完了
+            </button>
           </nav>
         </li>
       </ul>
@@ -177,17 +232,39 @@ const toggleMenuComp = (todoComp) => {
           @click="toggleMenuComp(todoComp)"
         >
           <p class="heading-23">{{ todoComp }}</p>
-          <button class="btn-incomp" @click="addInCompTodo(todoComp)" @click.stop="">
+          <button
+            class="btn-incomp"
+            @click="addInCompTodo(todoComp)"
+            @click.stop=""
+          >
             未完
           </button>
-          <button class="btn-delete" @click="deleteTodoComp(i)" @click.stop="">削除</button>
+          <button class="btn-delete" @click="deleteTodoComp(i)" @click.stop="">
+            削除
+          </button>
           <!-- ToDoアイテムごとに異なるメニュー -->
           <nav :class="{ open: menus[todoComp] }" @click.stop="">
-            <h1 class="close-h1" @click="toggleMenu(todo)">閉じる</h1>
+            <h1 class="close-h1" @click="toggleMenuComp(todoComp)">閉じる</h1>
             <li>
               <p class="p">{{ todoComp }}</p>
             </li>
-            <input class="memo" type="textearea" placeholder="メモの追加">
+            <input
+              class="memo"
+              type="textearea"
+              placeholder="メモの追加"
+              v-model="memos[todoComp]"
+              @keyup.enter="saveMemoToLocalStorage(todo)"
+            />
+            <button @click="saveMemoToLocalStorage(todoComp)">
+              メモを保存
+            </button>
+            <button
+              class="menu-incomp-btn"
+              @click="addInCompTodo(todoComp)"
+              @click.stop=""
+            >
+              未完了に戻す
+            </button>
           </nav>
         </li>
       </ul>
@@ -234,10 +311,10 @@ h1 {
   background-color: #f2f2f2;
   text-align: center;
 }
-.close-h1{
-    background-color: #2589d0;
-    color: white;
-    cursor: pointer;
+.close-h1 {
+  background-color: #2589d0;
+  color: white;
+  cursor: pointer;
 }
 p {
   margin: 0;
@@ -264,8 +341,8 @@ ul li {
 .li {
   display: flex;
 }
-.memo{
-    padding-bottom: 30px;
+.memo {
+  padding-bottom: 30px;
 }
 
 .btn {
@@ -320,5 +397,20 @@ ul li {
   color: black;
   font-weight: bold;
   border-bottom: 3px solid #d2d2d2;
+}
+
+.menu-comp-btn {
+  margin: 15px 0;
+  padding: 10px;
+  background-color: rgb(197, 255, 192);
+  border: none;
+  cursor: pointer;
+}
+.menu-incomp-btn {
+  margin: 15px 0;
+  padding: 10px;
+  background-color: rgb(192, 217, 255);
+  border: none;
+  cursor: pointer;
 }
 </style>

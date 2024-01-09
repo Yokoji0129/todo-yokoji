@@ -81,7 +81,7 @@ const filteredTodoCompList = computed(() => {
       add
     </button>
   </div>
-  <input type="date" v-model="selectDate" />
+  <input type="date" class="calendar" v-model="selectDate" />
   <TodoList
     :searchTerm="searchTerm"
     :filteredTodoCompList="filteredTodoCompList"
@@ -139,5 +139,21 @@ const filteredTodoCompList = computed(() => {
 .btn {
   padding: 0 30px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.calendar {
+  padding: 10px;
+  border: none;
+  border-radius: 5px;
+  margin-top: 10px;
+  font-size: 1em;
+  background-color: #f0f0f0;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* 影を追加 */
+  transition: background-color 0.3s, transform 0.2s; /* ホバーエフェクトのトランジション */
+}
+
+.calendar:hover {
+  background-color: #e0e0e0;
+  transform: scale(1.02);
 }
 </style>

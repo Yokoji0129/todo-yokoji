@@ -1,28 +1,18 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import TodayView from '../views/TodayView.vue'
+import TodoView from '../views/TodoView.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
     {
       path: '/',
-      name: 'today',
-      component: TodayView
+      name: 'todo',
+      component: TodoView
     },
     {
-      path: '/important',
-      name: 'important',
-      component: () => import('../views/ImportantView.vue')
-    },
-    {
-      path: '/plan',
-      name: 'plan',
-      component: () => import('../views/PlanView.vue')
-    },
-    {
-      path: '/all',
-      name: 'all',
-      component: () => import('../views/AllView.vue')
+      path: '/yokoji',
+      name: 'yokoji',
+      component: () => import('../views/YokojiView.vue')
     },
   ]
 })
