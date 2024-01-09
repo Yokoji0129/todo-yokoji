@@ -1,88 +1,67 @@
 <script setup>
-import TodoList from '../components/TodoList.vue'
-import { ref, onMounted } from 'vue'
-const searchTerm = ref('')
-const todoList = ref([])
-const todoListComp = ref([])
-
-// ローカルストレージからデータを読み込む
-const loadTodoListFromLocalStorage = () => {
-  const storedTodoList = localStorage.getItem('todoList')
-  if (storedTodoList) {
-    todoList.value = JSON.parse(storedTodoList)
-  }
-
-  const storedTodoListComp = localStorage.getItem('todoListComp')
-  if (storedTodoListComp) {
-    todoListComp.value = JSON.parse(storedTodoListComp)
-  }
-}
+import TodoList from "../components/TodoList.vue";
+import { ref, onMounted } from "vue";
+const searchTerm = ref("");
+const todoList = ref([]);
+const todoListComp = ref([]);
 
 // ローカルストレージにデータを保存する
 const saveTodoListToLocalStorage = () => {
-  localStorage.setItem('todoList', JSON.stringify(todoList.value))
-}
+  localStorage.setItem("todoList", JSON.stringify(todoList.value));
+};
 
 const saveTodoListCompToLocalStorage = () => {
-  localStorage.setItem('todoListComp', JSON.stringify(todoListComp.value))
-}
+  localStorage.setItem("todoListComp", JSON.stringify(todoListComp.value));
+};
 
 // todoを追加するメソッド
 const addTodo = () => {
   if (searchTerm.value) {
-    todoList.value.push(searchTerm.value)
-    searchTerm.value = ''
-    saveTodoListToLocalStorage()
+    todoList.value.push(searchTerm.value);
+    searchTerm.value = "";
+    saveTodoListToLocalStorage();
   } else {
-    window.alert('todoを入力してください')
+    window.alert("todoを入力してください");
   }
-}
+};
 
-// todoを完了させるメソッド
-const addCompTodo = (todo) => {
-  // 未完了リストから完了したものを削除(itemがtodoと異なるものを削除)
-  todoList.value = todoList.value.filter(item => item !== todo)
-  // 完了リストに追加
-  todoListComp.value.push(todo)
-  // 未完了todo
-  saveTodoListToLocalStorage()
-  // 完了済みtodo
-  saveTodoListCompToLocalStorage()
-}
+const updateTodoList = (updatedList) => {
+  todoList.value = updatedList;
+  saveTodoListToLocalStorage();
+};
 
-// 完了済みから未完了にtodoを移動させる
-const addInCompTodo = (todo) => {
-  todoListComp.value = todoListComp.value.filter(item => item !== todo);
-  todoList.value.push(todo)
-  saveTodoListToLocalStorage()
-  saveTodoListCompToLocalStorage()
-}
-
-// 未完了todoから削除
-const deleteTodo = (index) => {
-  todoList.value.splice(index, 1)
-  saveTodoListToLocalStorage()
-}
-
-// 完了済みtodoから削除
-const deleteTodoComp = (index) => {
-  todoListComp.value.splice(index, 1)
-  saveTodoListCompToLocalStorage()
-}
-
-// コンポーネントがマウントされた時にローカルストレージからデータを読み込む
-onMounted(() => {
-  loadTodoListFromLocalStorage()
-})
+const updateTodoListComp = (updatedList) => {
+  todoListComp.value = updatedList;
+  saveTodoListCompToLocalStorage();
+};
 </script>
 
 <template>
   <div class="text">
-    <input type="text" class="textbox-1" placeholder="タスクの追加" v-model="searchTerm" @keyup.enter="addTodo" />
-    <button class="btn" @click="addTodo()">add</button>
+    <input
+      type="text"
+      class="textbox-1"
+      placeholder="タスクの追加"
+      v-model="searchTerm"
+      @keyup.enter="addTodo"
+    />
+    <!--文字が入力されている場合cursor: pointer 入力されていない場合 cursor: not-alloweb-->
+    <button
+      class="btn"
+      :style="{ cursor: searchTerm ? 'pointer' : 'not-allowed' }"
+      @click="addTodo()"
+    >
+      add
+    </button>
   </div>
-  <TodoList :todoList="todoList" :addCompTodo="addCompTodo" :deleteTodo="deleteTodo" :todoListComp="todoListComp"
-    :deleteTodoComp="deleteTodoComp" :addInCompTodo="addInCompTodo" />
+  <TodoList
+    :todoList="todoList"
+    :todoListComp="todoListComp"
+    :saveTodoListToLocalStorage="saveTodoListToLocalStorage"
+    :saveTodoListCompToLocalStorage="saveTodoListCompToLocalStorage"
+    @updateTodoList="updateTodoList"
+    @updateTodoListComp="updateTodoListComp"
+  />
 </template>
 
 <style scoped>
@@ -110,6 +89,5 @@ onMounted(() => {
 .btn {
   padding: 0 30px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-  cursor: pointer;
 }
 </style>

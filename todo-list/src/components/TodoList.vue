@@ -1,121 +1,198 @@
 <script setup>
-import { ref } from 'vue'
+import { ref, defineProps, defineEmits, watch, onMounted } from "vue";
+
 const props = defineProps({
-    todoList: Array,
-    todoListComp: Array,
-    addCompTodo: Function,
-    deleteTodo: Function,
-    deleteTodoComp: Function,
-    addInCompTodo: Function
-})
+  todoList: Array,
+  todoListComp: Array,
+  saveTodoListToLocalStorage: Function,
+  saveTodoListCompToLocalStorage: Function,
+});
+
+const emits = defineEmits(["updateTodoList", "updateTodoListComp"]);
+
+// ref を使用してローカルな変数を作成
+const localTodoList = ref(props.todoList);
+const localTodoListComp = ref(props.todoListComp);
+
+// ローカルストレージからデータを読み込む
+const loadTodoListFromLocalStorage = () => {
+  const storedTodoList = localStorage.getItem("todoList");
+  if (storedTodoList) {
+    localTodoList.value = JSON.parse(storedTodoList);
+  }
+
+  const storedTodoListComp = localStorage.getItem("todoListComp");
+  if (storedTodoListComp) {
+    localTodoListComp.value = JSON.parse(storedTodoListComp);
+  }
+};
+
+// todoを完了させるメソッド
+const addCompTodo = (todo) => {
+  localTodoList.value = localTodoList.value.filter((item) => item !== todo);
+  localTodoListComp.value.push(todo);
+  saveTodoListToLocalStorage();
+  saveTodoListCompToLocalStorage();
+};
+
+// 完了済みから未完了にtodoを移動させる
+const addInCompTodo = (todo) => {
+  localTodoListComp.value = localTodoListComp.value.filter((item) => item !== todo);
+  localTodoList.value.push(todo);
+  saveTodoListToLocalStorage();
+  saveTodoListCompToLocalStorage();
+};
+
+// 未完了todoから削除
+const deleteTodo = (index) => {
+  localTodoList.value.splice(index, 1);
+  saveTodoListToLocalStorage();
+};
+
+// 完了済みtodoから削除
+const deleteTodoComp = (index) => {
+  localTodoListComp.value.splice(index, 1);
+  saveTodoListCompToLocalStorage();
+};
+
+// ローカルストレージに未完了todoを保存
+const saveTodoListToLocalStorage = () => {
+  localStorage.setItem("todoList", JSON.stringify(localTodoList.value));
+};
+
+// ローカルストレージに完了済みtodoを保存
+const saveTodoListCompToLocalStorage = () => {
+  localStorage.setItem("todoListComp", JSON.stringify(localTodoListComp.value));
+};
+
+// 監視して親コンポーネントに更新を通知
+watch(localTodoList, (newValue) => {
+  emits("updateTodoList", newValue);
+});
+
+watch(localTodoListComp, (newValue) => {
+  emits("updateTodoListComp", newValue);
+});
+
+// コンポーネントがマウントされた時にローカルストレージからデータを読み込む
+onMounted(() => {
+  loadTodoListFromLocalStorage();
+});
 </script>
 
-<template>
-    <h1 v-if="todoList.length === 0 && todoListComp.length === 0">ToDoを追加してください</h1>
-    <div>
-        <h3 v-if="todoList.length">未完了({{ todoList.length }})</h3>
-        <ul class="ul">
-            <li class="li" v-for="(todo, i) in todoList" :key="i">
-                <p class="heading-23">{{ todo }}</p>
-                <button class="btn" @click="addCompTodo(todo)">完了</button>
-                <button class="btn-delete" @click="deleteTodo(i)">削除</button>
-            </li>
-        </ul>
-    </div>
 
-    <div>
-        <h3 class="h3" v-if="todoListComp.length">完了済み({{ todoListComp.length }})</h3>
-        <ul class="ul">
-            <li class="li" v-for="(todoComp, i) in todoListComp" :key="i">
-                <p class="heading-23">{{ todoComp }}</p>
-                <button class="btn-incomp" @click="addInCompTodo(todoComp)">未完</button>
-                <button class="btn-delete" @click="deleteTodoComp(i)">削除</button>
-            </li>
-        </ul>
-    </div>
+<template>
+  <h1 v-if="localTodoList.length === 0 && localTodoListComp.length === 0">
+    ToDoを追加してください
+  </h1>
+  <div>
+    <h3 v-if="localTodoList.length">未完了({{ localTodoList.length }})</h3>
+    <ul class="ul">
+      <li class="li" v-for="(todo, i) in localTodoList" :key="i">
+        <p class="heading-23">{{ todo }}</p>
+        <button class="btn" @click="addCompTodo(todo)">完了</button>
+        <button class="btn-delete" @click="deleteTodo(i)">削除</button>
+      </li>
+    </ul>
+  </div>
+
+  <div>
+    <h3 class="h3" v-if="localTodoListComp.length">
+      完了済み({{ localTodoListComp.length }})
+    </h3>
+    <ul class="ul">
+      <li class="li" v-for="(todoComp, i) in localTodoListComp" :key="i">
+        <p class="heading-23">{{ todoComp }}</p>
+        <button class="btn-incomp" @click="addInCompTodo(todoComp)">
+          未完
+        </button>
+        <button class="btn-delete" @click="deleteTodoComp(i)">削除</button>
+      </li>
+    </ul>
+  </div>
 </template>
 
 <style scoped>
 .heading-23 {
-    padding: 20px 10px;
-    width: 100%;
-    border-left: 5px solid #2589d0;
-    border-bottom: 3px solid #d2d2d2;
-    background-color: #f2f2f2;
-    color: #333333;
+  padding: 20px 10px;
+  width: 100%;
+  border-left: 5px solid #2589d0;
+  border-bottom: 3px solid #d2d2d2;
+  background-color: #f2f2f2;
+  color: #333333;
 }
-h1{
-    text-align: center;
+h1 {
+  text-align: center;
 }
-p{
-    margin: 0;
+p {
+  margin: 0;
 }
-.h3{
-    margin: 0;
+.h3 {
+  margin: 0;
 }
-.ul{
-    margin: 30px 0;
+.ul {
+  margin: 30px 0;
 }
-ul li{
-    list-style: none;
-    margin: 0 60px 10px 0;
-}
-
-.li{
-    display: flex;
+ul li {
+  list-style: none;
+  margin: 0 60px 10px 0;
 }
 
-.btn{
-    background-color: rgb(197, 255, 192);
-    border-bottom: 3px solid #d2d2d2;;
-    padding: 0 30px;
-    border-top: none;
-    border-right: none;
-    border-left: none;
-    cursor: pointer;
+.li {
+  display: flex;
 }
 
-.btn:hover{
-    background-color: rgb(167, 213, 163);
-}
-.btn-delete{
-    background-color: rgb(255, 192, 192);
-    border-bottom: 3px solid #d2d2d2;;
-    padding: 0 30px;
-    border-top: none;
-    border-right: none;
-    border-left: none;
-    cursor: pointer;
-}
-.btn-delete:hover{
-    background-color: rgb(219, 165, 165);
+.btn {
+  background-color: rgb(197, 255, 192);
+  border-bottom: 3px solid #d2d2d2;
+  padding: 0 30px;
+  border-top: none;
+  border-right: none;
+  border-left: none;
+  cursor: pointer;
 }
 
-.btn-incomp{
-    background-color: rgb(192, 217, 255);
-    border-bottom: 3px solid #d2d2d2;;
-    padding: 0 30px;
-    border-top: none;
-    border-right: none;
-    border-left: none;
-    cursor: pointer;
+.btn:hover {
+  background-color: rgb(167, 213, 163);
 }
-.btn-incomp:hover{
-    background-color: rgb(166, 188, 220);
+.btn-delete {
+  background-color: rgb(255, 192, 192);
+  border-bottom: 3px solid #d2d2d2;
+  padding: 0 30px;
+  border-top: none;
+  border-right: none;
+  border-left: none;
+  cursor: pointer;
+}
+.btn-delete:hover {
+  background-color: rgb(219, 165, 165);
+}
+
+.btn-incomp {
+  background-color: rgb(192, 217, 255);
+  border-bottom: 3px solid #d2d2d2;
+  padding: 0 30px;
+  border-top: none;
+  border-right: none;
+  border-left: none;
+  cursor: pointer;
+}
+.btn-incomp:hover {
+  background-color: rgb(166, 188, 220);
 }
 .textbox-3 {
-    width: 100%;
-    padding: 8px 10px;
-    border-top: none;
-    border-right: none;
-    border-left: none;
-    border-radius: 3px;
-    background: #eff6fc;
-    color: #333;
-    font-size: 1em;
-    line-height: 1.5;
-    color: black;
-    font-weight: bold;
-    border-bottom: 3px solid #d2d2d2;;
+  width: 100%;
+  padding: 8px 10px;
+  border-top: none;
+  border-right: none;
+  border-left: none;
+  border-radius: 3px;
+  background: #eff6fc;
+  color: #333;
+  font-size: 1em;
+  line-height: 1.5;
+  color: black;
+  font-weight: bold;
+  border-bottom: 3px solid #d2d2d2;
 }
 </style>
