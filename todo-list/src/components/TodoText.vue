@@ -7,6 +7,14 @@ const todoList = ref([]); // todoを追加するときの配列
 const todoListComp = ref([]); // 完了済みtodoを入れる配列
 const selectDate = ref("");
 
+const showSortMenu = ref(false);
+
+const toggleSortMenu = () => {
+  showSortMenu.value = !showSortMenu.value;
+};
+
+const disableTodoListInput = computed(() => showSortMenu.value);
+
 // ローカルストレージにデータを保存する
 const saveTodoListToLocalStorage = () => {
   localStorage.setItem("todoList", JSON.stringify(todoList.value));
@@ -62,41 +70,29 @@ const filteredTodoCompList = computed(() => {
 <template>
   <!--検索ボックス-->
   <div class="search-box">
-    <input class="search" type="text" placeholder="検索">
+    <input class="search" type="text" placeholder="検索" v-model="searchTerm">
   </div>
   <div class="text">
-    <input type="text" class="textbox-1" placeholder="タスクの追加" v-model="searchTerm" @keyup.enter="addTodo" />
-    <button class="btn" @click="addTodo()">add</button>
-  </div>
-  <div class="text">
-    <input
-      type="text"
-      class="textbox-1"
-      placeholder="タスクの追加"
-      v-model="newTodo"
-      @keyup.enter="addTodo"
-    />
+    <input type="text" class="textbox-1" placeholder="タスクの追加" v-model="newTodo" @keyup.enter="addTodo" />
     <!--文字が入力されている場合cursor: pointer 入力されていない場合 cursor: not-alloweb-->
-    <button
-      class="btn"
-      :style="{ cursor: newTodo ? 'pointer' : 'not-allowed' }"
-      @click="addTodo()"
-    >
+    <button class="btn" :style="{ cursor: newTodo ? 'pointer' : 'not-allowed' }" @click="addTodo()">
       add
     </button>
   </div>
-  <input type="date" class="calendar" v-model="selectDate" />
-  <TodoList
-    :searchTerm="searchTerm"
-    :filteredTodoCompList="filteredTodoCompList"
-    :filteredTodoList="filteredTodoList"
-    :todoList="todoList"
-    :todoListComp="todoListComp"
-    :saveTodoListToLocalStorage="saveTodoListToLocalStorage"
-    :saveTodoListCompToLocalStorage="saveTodoListCompToLocalStorage"
-    @updateTodoList="updateTodoList"
-    @updateTodoListComp="updateTodoListComp"
-  />
+  <div class="date-sort">
+    <input type="date" class="calendar" v-model="selectDate" />
+    <p class="sort" @click="toggleSortMenu()">↑↓並べ替え</p>
+  </div>
+  <div class="sort-menu" v-if="showSortMenu">
+    <h3 class="sort-h3">並べ替え</h3>
+    <p class="sort-p">あいうえお順</p>
+    <p class="sort-p">期限日</p>
+    <!-- 他にも必要な並び替えオプションを追加 -->
+  </div>
+  <TodoList :searchTerm="searchTerm" :filteredTodoCompList="filteredTodoCompList" :filteredTodoList="filteredTodoList"
+    :todoList="todoList" :todoListComp="todoListComp" :saveTodoListToLocalStorage="saveTodoListToLocalStorage"
+    :saveTodoListCompToLocalStorage="saveTodoListCompToLocalStorage" @updateTodoList="updateTodoList"
+    @updateTodoListComp="updateTodoListComp" />
 </template>
 
 <style scoped>
@@ -119,6 +115,7 @@ const filteredTodoCompList = computed(() => {
 .search:focus {
   outline: none;
 }
+
 .text {
   margin-top: 60px;
   display: flex;
@@ -128,11 +125,10 @@ const filteredTodoCompList = computed(() => {
   width: 100%;
   padding: 10px;
   border: none;
-  border-radius: 3px;
+  border-radius: 3px 3px 3px 0;
   font-size: 1em;
   line-height: 1.5;
   background-color: #ffffff;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
 .textbox-1::placeholder {
@@ -146,18 +142,44 @@ const filteredTodoCompList = computed(() => {
 }
 
 .calendar {
-  padding: 10px;
   border: none;
-  border-radius: 5px;
-  margin-top: 10px;
-  font-size: 1em;
-  background-color: #f0f0f0;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* 影を追加 */
-  transition: background-color 0.3s, transform 0.2s; /* ホバーエフェクトのトランジション */
+  cursor: pointer;
+  background-color: #ebebeb;
 }
 
-.calendar:hover {
-  background-color: #e0e0e0;
-  transform: scale(1.02);
+.date-sort {
+  display: flex;
+}
+
+.sort{
+  cursor: pointer;
+  margin: 5px 10px;
+  padding: 5px 10px;
+}
+
+.sort:hover{
+  background-color: #ffffff;
+}
+
+.sort-menu {
+  background-color: #ffffff;
+  border-radius: 5px;
+  margin: 5px 70% 0 0;
+  padding: 0 0 3px 0;
+}
+
+.sort-h3{
+  text-align: center;
+  border-bottom: 2px solid #ebebeb;
+  margin: 0;
+}
+
+.sort-p{
+  cursor: pointer;
+  margin: 5px 0;
+  padding: 5px 0;
+}
+.sort-p:hover{
+  background-color: #eae9e9;
 }
 </style>

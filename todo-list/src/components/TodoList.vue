@@ -288,7 +288,7 @@ const toggleMenuComp = (todoComp) => {
 
 <style scoped>
 nav {
-  padding: 10px;
+  padding: 15px;
   position: fixed;
   top: 60px;
   right: -330px;
@@ -356,7 +356,8 @@ ul li {
   display: flex;
 }
 .memo {
-  padding-bottom: 30px;
+  padding-bottom: 60px;
+  font-size: 16px;
 }
 
 .btn {

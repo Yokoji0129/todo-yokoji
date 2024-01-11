@@ -8,7 +8,6 @@ const props = defineProps({
   <main :class="{ 'shift-right': menuOpen }">
     <div>
       <h1>TODOリスト作ってみました!!!</h1>
-      <h1>頑張りました!!!</h1>
     </div>
   </main>
 </template>
