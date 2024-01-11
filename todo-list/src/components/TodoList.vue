@@ -148,6 +148,12 @@ const toggleMenuComp = (todoComp) => {
   // 選択されたToDoアイテムのメニューをトグル
   menus.value[todoComp] = !menus.value[todoComp];
 };
+
+const toggleCategory = ref(false)
+
+const toggleCategoryMenu = () => {
+  toggleCategory.value = !toggleCategory.value;
+}
 </script>
 
 
@@ -155,23 +161,17 @@ const toggleMenuComp = (todoComp) => {
   <div v-if="searchTerm.length">
     <h1>"{{ searchTerm }}" を検索中</h1>
   </div>
-  <div
-    v-if="
-      searchTerm.length &&
-      filteredTodoList.length === 0 &&
-      filteredTodoCompList.length === 0
-    "
-  >
+  <div v-if="searchTerm.length &&
+    filteredTodoList.length === 0 &&
+    filteredTodoCompList.length === 0
+    ">
     <h2 class="h1">検索結果なし</h2>
   </div>
   <div>
-    <h1
-      v-if="
-        searchTerm.length === 0 &&
-        localTodoList.length === 0 &&
-        localTodoListComp.length === 0
-      "
-    >
+    <h1 v-if="searchTerm.length === 0 &&
+      localTodoList.length === 0 &&
+      localTodoListComp.length === 0
+      ">
       ToDoを追加してください
     </h1>
 
@@ -179,12 +179,7 @@ const toggleMenuComp = (todoComp) => {
     <div>
       <h3 v-if="localTodoList.length">未完了({{ localTodoList.length }})</h3>
       <ul class="ul">
-        <li
-          class="li"
-          v-for="(todo, i) in filteredTodoList"
-          :key="i"
-          @click="toggleMenu(todo)"
-        >
+        <li class="li" v-for="(todo, i) in filteredTodoList" :key="i" @click="toggleMenu(todo)">
           <p class="heading-23">{{ todo }}</p>
           <button class="btn" @click="addCompTodo(todo)" @click.stop="">
             完了
@@ -198,26 +193,25 @@ const toggleMenuComp = (todoComp) => {
             <li>
               <p class="p">{{ todo }}</p>
             </li>
-            <input
-              class="memo"
-              type="textearea"
-              placeholder="メモの追加"
-              v-model="memos[todo]"
-              @keyup.enter="saveMemoToLocalStorage(todo)"
-            />
-            <button
-              @click="saveMemoToLocalStorage(todo)"
-              style="cursor: pointer"
-            >
+            <input class="memo" type="textearea" placeholder="メモの追加" v-model="memos[todo]"
+              @keyup.enter="saveMemoToLocalStorage(todo)" />
+            <button @click="saveMemoToLocalStorage(todo)" style="cursor: pointer">
               メモを保存
             </button>
-            <button
-              class="menu-comp-btn"
-              @click="addCompTodo(todo)"
-              @click.stop=""
-            >
+            <!--カテゴリーメニュー-->
+            <div>
+              <p class="category" @click="toggleCategoryMenu">カテゴリーを追加</p>
+              <ul class="category-menu" v-if="toggleCategory">
+                <li>redcategory</li>
+                <li>bluecategory</li>
+                <li>greencategory</li>
+              </ul>
+            </div>
+            <!--タスク完了ボタン-->
+            <button class="menu-comp-btn" @click="addCompTodo(todo)" @click.stop="">
               完了
             </button>
+            <!--タスク削除ボタン-->
             <button class="menu-btn-delete" @click="deleteTodo(i)" @click.stop="">
               削除
             </button>
@@ -232,18 +226,9 @@ const toggleMenuComp = (todoComp) => {
         完了済み({{ localTodoListComp.length }})
       </h3>
       <ul class="ul">
-        <li
-          class="li"
-          v-for="(todoComp, i) in filteredTodoCompList"
-          :key="i"
-          @click="toggleMenuComp(todoComp)"
-        >
+        <li class="li" v-for="(todoComp, i) in filteredTodoCompList" :key="i" @click="toggleMenuComp(todoComp)">
           <p class="heading-23">{{ todoComp }}</p>
-          <button
-            class="btn-incomp"
-            @click="addInCompTodo(todoComp)"
-            @click.stop=""
-          >
+          <button class="btn-incomp" @click="addInCompTodo(todoComp)" @click.stop="">
             未完
           </button>
           <button class="btn-delete" @click="deleteTodoComp(i)" @click.stop="">
@@ -255,28 +240,15 @@ const toggleMenuComp = (todoComp) => {
             <li>
               <p class="p">{{ todoComp }}</p>
             </li>
-            <input
-              class="memo"
-              type="textearea"
-              placeholder="メモの追加"
-              v-model="memos[todoComp]"
-              @keyup.enter="saveMemoToLocalStorage(todo)"
-            />
+            <input class="memo" type="textearea" placeholder="メモの追加" v-model="memos[todoComp]"
+              @keyup.enter="saveMemoToLocalStorage(todo)" />
             <button @click="saveMemoToLocalStorage(todoComp)">
               メモを保存
             </button>
-            <button
-              class="menu-incomp-btn"
-              @click="addInCompTodo(todoComp)"
-              @click.stop=""
-            >
+            <button class="menu-incomp-btn" @click="addInCompTodo(todoComp)" @click.stop="">
               未完了に戻す
             </button>
-            <button
-              class="menu-btn-delete"
-              @click="deleteTodoComp(i)"
-              @click.stop=""
-            >
+            <button class="menu-btn-delete" @click="deleteTodoComp(i)" @click.stop="">
               削除
             </button>
           </nav>
@@ -300,11 +272,13 @@ nav {
   transition: 0.3s;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
 }
+
 .open {
   right: 0;
   background-color: #faf9f8;
   transition: 0.3s;
 }
+
 .heading-23 {
   padding: 15px 10px;
   width: 100%;
@@ -314,25 +288,31 @@ nav {
   color: #333333;
   cursor: pointer;
 }
+
 .heading-23:hover {
   background-color: #d4d4d4;
 }
+
 h1 {
   text-align: center;
 }
+
 .h1 {
   color: #2589d0;
   background-color: #f2f2f2;
   text-align: center;
 }
+
 .close-h1 {
   background-color: #2589d0;
   color: white;
   cursor: pointer;
 }
+
 p {
   margin: 0;
 }
+
 .p {
   margin: 5px;
   font-weight: bold;
@@ -341,12 +321,15 @@ p {
   width: 100%;
   border-radius: 10px;
 }
+
 .h3 {
   margin: 0;
 }
+
 .ul {
   margin: 30px 0;
 }
+
 ul li {
   list-style: none;
   margin: 0 60px 10px 0;
@@ -355,6 +338,7 @@ ul li {
 .li {
   display: flex;
 }
+
 .memo {
   padding-bottom: 60px;
   font-size: 16px;
@@ -373,6 +357,7 @@ ul li {
 .btn:hover {
   background-color: rgb(167, 213, 163);
 }
+
 .btn-delete {
   background-color: rgb(255, 192, 192);
   border-bottom: 3px solid #d2d2d2;
@@ -382,6 +367,7 @@ ul li {
   border-left: none;
   cursor: pointer;
 }
+
 .btn-delete:hover {
   background-color: rgb(219, 165, 165);
 }
@@ -395,9 +381,11 @@ ul li {
   border-left: none;
   cursor: pointer;
 }
+
 .btn-incomp:hover {
   background-color: rgb(166, 188, 220);
 }
+
 .textbox-3 {
   width: 100%;
   padding: 8px 10px;
@@ -414,6 +402,14 @@ ul li {
   border-bottom: 3px solid #d2d2d2;
 }
 
+.category {
+  text-align: center;
+  background-color: #ffffff;
+  padding: 10px;
+  cursor: pointer;
+  margin: 15px 0 0 0;
+}
+
 .menu-comp-btn {
   margin: 15px 0 0 0;
   padding: 10px;
@@ -421,9 +417,11 @@ ul li {
   border: none;
   cursor: pointer;
 }
+
 .menu-comp-btn:hover {
   background-color: rgb(167, 213, 163);
 }
+
 .menu-incomp-btn {
   margin: 15px 0 0 0;
   padding: 10px;
@@ -431,6 +429,7 @@ ul li {
   border: none;
   cursor: pointer;
 }
+
 .menu-incomp-btn:hover {
   background-color: rgb(166, 188, 220);
 }
@@ -442,6 +441,7 @@ ul li {
   border: none;
   cursor: pointer;
 }
+
 .menu-btn-delete:hover {
   background-color: rgb(219, 165, 165);
 }

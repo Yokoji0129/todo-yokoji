@@ -1,7 +1,7 @@
 <script setup>
 import { ref, onMounted } from 'vue'
 import DateToday from '../components/DateToday.vue'; // 今日の日付コンポーネント
-import TodoText from '../components/TodoText.vue'; // テキスト入力コンポーネント
+import TodoText from '../components/TodoText/TodoText.vue'; // テキスト入力コンポーネント
 const props = defineProps({
   menuOpen: Boolean
 })
@@ -10,7 +10,7 @@ const props = defineProps({
 <template>
   <main :class="{ 'shift-right': menuOpen }">
     <div>
-      <h2>今日の予定</h2>
+      <h2>予定</h2>
       <DateToday />
     </div>
     <div>
