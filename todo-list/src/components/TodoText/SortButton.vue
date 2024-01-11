@@ -5,6 +5,14 @@ const props = defineProps({
     todoListComp: Array
 })
 
+// 正規表現でnewTodoの文字列だけを抽出する
+const extractNewTodo = (todo) => {
+  // todoの文字列が(/期日: (.+?)　(.+?)/)の正規表現とマッチしているかを検査
+  const dateMatch = todo.match(/期日: (.+?)　(.+?)/);
+  console.log(dateMatch)
+  return dateMatch ? dateMatch[2] : ''; // sateMatch[2]はnewTodoの文字部分
+};
+
 const sortAiueo = () => {
   props.todoList.sort((a, b) => {
     // "期日: " の部分だけを取り出して比較
@@ -25,14 +33,6 @@ const extractDate = (todo) => {
   // todoの文字列が(/期日: (.+?)　/)の正規表現とマッチしているかを検査
   const dateMatch = todo.match(/期日: (.+?)　/);
   return dateMatch ? dateMatch[1] : ''; // sateMatch[1]は日付の部分
-};
-
-// 正規表現でnewTodoの文字列だけを抽出する
-const extractNewTodo = (todo) => {
-  // todoの文字列が(/期日: (.+?)　(.+?)/)の正規表現とマッチしているかを検査
-  const dateMatch = todo.match(/期日: (.+?)　(.+?)/);
-  console.log(dateMatch)
-  return dateMatch ? dateMatch[2] : ''; // sateMatch[2]はnewTodoの文字部分
 };
 
 // 日付文字列を数値に変換する関数

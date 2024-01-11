@@ -1,4 +1,7 @@
 <script setup>
+import NowSearch from "./NowSearch.vue";
+import NotSearch from "./NotSearch.vue";
+import NotTodo from "./NotTodo.vue";
 import { ref, defineProps, defineEmits, watch, onMounted } from "vue";
 
 const props = defineProps({
@@ -158,22 +161,13 @@ const toggleCategoryMenu = () => {
 
 
 <template>
-  <div v-if="searchTerm.length">
-    <h1>"{{ searchTerm }}" を検索中</h1>
-  </div>
-  <div v-if="searchTerm.length &&
-    filteredTodoList.length === 0 &&
-    filteredTodoCompList.length === 0
-    ">
-    <h2 class="h1">検索結果なし</h2>
-  </div>
+  <!--todoを検索するときに表示-->
+  <NowSearch :searchTerm="searchTerm" />
+  <!--検索結果が0の時のデザイン-->
+  <NotSearch :searchTerm="searchTerm" :filteredTodoList="filteredTodoList" :filteredTodoCompList="filteredTodoCompList" />
   <div>
-    <h1 v-if="searchTerm.length === 0 &&
-      localTodoList.length === 0 &&
-      localTodoListComp.length === 0
-      ">
-      ToDoを追加してください
-    </h1>
+    <!--Todoが0件の時に表示-->
+    <NotTodo :searchTerm="searchTerm" :localTodoList="localTodoList" :localTodoListComp="localTodoListComp" />
 
     <!--未完了リスト-->
     <div>
@@ -190,32 +184,32 @@ const toggleCategoryMenu = () => {
           <!-- ToDoアイテムごとに異なるメニュー -->
           <nav :class="{ open: menus[todo] }" @click.stop="">
             <h1 class="close-h1" @click="toggleMenu(todo)">閉じる</h1>
-            <li>
-              <p class="p">{{ todo }}</p>
-            </li>
-            <input class="memo" type="textearea" placeholder="メモの追加" v-model="memos[todo]"
-              @keyup.enter="saveMemoToLocalStorage(todo)" />
-            <button @click="saveMemoToLocalStorage(todo)" style="cursor: pointer">
-              メモを保存
-            </button>
-            <!--カテゴリーメニュー-->
-            <div>
-              <p class="category" @click="toggleCategoryMenu">カテゴリーを追加</p>
-              <ul class="category-menu" v-if="toggleCategory">
-                <li>redcategory</li>
-                <li>bluecategory</li>
-                <li>greencategory</li>
-              </ul>
-            </div>
-            <!--タスク完了ボタン-->
-            <button class="menu-comp-btn" @click="addCompTodo(todo)" @click.stop="">
-              完了
-            </button>
-            <!--タスク削除ボタン-->
-            <button class="menu-btn-delete" @click="deleteTodo(i)" @click.stop="">
-              削除
-            </button>
-          </nav>
+        <li>
+          <p class="p">{{ todo }}</p>
+        </li>
+        <input class="memo" type="textearea" placeholder="メモの追加" v-model="memos[todo]"
+          @keyup.enter="saveMemoToLocalStorage(todo)" />
+        <button @click="saveMemoToLocalStorage(todo)" style="cursor: pointer">
+          メモを保存
+        </button>
+        <!--カテゴリーメニュー-->
+        <div>
+          <p class="category" @click="toggleCategoryMenu">カテゴリーを追加</p>
+          <ul class="category-menu" v-if="toggleCategory">
+            <li>redcategory</li>
+            <li>bluecategory</li>
+            <li>greencategory</li>
+          </ul>
+        </div>
+        <!--タスク完了ボタン-->
+        <button class="menu-comp-btn" @click="addCompTodo(todo)" @click.stop="">
+          完了
+        </button>
+        <!--タスク削除ボタン-->
+        <button class="menu-btn-delete" @click="deleteTodo(i)" @click.stop="">
+          削除
+        </button>
+        </nav>
         </li>
       </ul>
     </div>
@@ -237,21 +231,21 @@ const toggleCategoryMenu = () => {
           <!-- ToDoアイテムごとに異なるメニュー -->
           <nav :class="{ open: menus[todoComp] }" @click.stop="">
             <h1 class="close-h1" @click="toggleMenuComp(todoComp)">閉じる</h1>
-            <li>
-              <p class="p">{{ todoComp }}</p>
-            </li>
-            <input class="memo" type="textearea" placeholder="メモの追加" v-model="memos[todoComp]"
-              @keyup.enter="saveMemoToLocalStorage(todo)" />
-            <button @click="saveMemoToLocalStorage(todoComp)">
-              メモを保存
-            </button>
-            <button class="menu-incomp-btn" @click="addInCompTodo(todoComp)" @click.stop="">
-              未完了に戻す
-            </button>
-            <button class="menu-btn-delete" @click="deleteTodoComp(i)" @click.stop="">
-              削除
-            </button>
-          </nav>
+        <li>
+          <p class="p">{{ todoComp }}</p>
+        </li>
+        <input class="memo" type="textearea" placeholder="メモの追加" v-model="memos[todoComp]"
+          @keyup.enter="saveMemoToLocalStorage(todo)" />
+        <button @click="saveMemoToLocalStorage(todoComp)">
+          メモを保存
+        </button>
+        <button class="menu-incomp-btn" @click="addInCompTodo(todoComp)" @click.stop="">
+          未完了に戻す
+        </button>
+        <button class="menu-btn-delete" @click="deleteTodoComp(i)" @click.stop="">
+          削除
+        </button>
+        </nav>
         </li>
       </ul>
     </div>
@@ -291,16 +285,6 @@ nav {
 
 .heading-23:hover {
   background-color: #d4d4d4;
-}
-
-h1 {
-  text-align: center;
-}
-
-.h1 {
-  color: #2589d0;
-  background-color: #f2f2f2;
-  text-align: center;
 }
 
 .close-h1 {

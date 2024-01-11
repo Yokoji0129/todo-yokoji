@@ -1,6 +1,6 @@
 <script setup>
 import SortButton from "../TodoText/SortButton.vue";
-import TodoList from "../../components/TodoList.vue";
+import TodoList from "../../components/TodoList/TodoList.vue"
 import { ref, computed } from "vue";
 const searchTerm = ref("");
 const newTodo = ref(""); // todoを追加する文字入れ
@@ -71,6 +71,7 @@ const filteredTodoCompList = computed(() => {
   <div class="search-box">
     <input class="search" type="text" placeholder="検索" v-model="searchTerm">
   </div>
+  <!--ToDo入力欄-->
   <div class="text">
     <input type="text" class="textbox-1" placeholder="タスクの追加" v-model="newTodo" @keyup.enter="addTodo" />
     <!--文字が入力されている場合cursor: pointer 入力されていない場合 cursor: not-alloweb-->
@@ -78,6 +79,7 @@ const filteredTodoCompList = computed(() => {
       add
     </button>
   </div>
+  <!--日付追加と並び替えメニューボタン-->
   <div class="date-sort">
     <input type="date" class="calendar" v-model="selectDate" />
     <p class="sort" @click="toggleSortMenu()">↑↓並べ替え</p>
