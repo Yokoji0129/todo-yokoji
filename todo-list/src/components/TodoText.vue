@@ -77,6 +77,10 @@ onMounted(() => {
 </script>
 
 <template>
+  <!--検索ボックス-->
+  <div class="search-box">
+    <input class="search" type="text" placeholder="検索">
+  </div>
   <div class="text">
     <input type="text" class="textbox-1" placeholder="タスクの追加" v-model="searchTerm" @keyup.enter="addTodo" />
     <button class="btn" @click="addTodo()">add</button>

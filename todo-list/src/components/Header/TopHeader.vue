@@ -11,10 +11,6 @@ const props = defineProps({
             <div class="top">
                 <!--画面左上のテキスト-->
                 <h3 class="header-text">ToDo</h3>
-                <!--検索ボックス-->
-                <div class="search-box">
-                    <input class="search" type="text" placeholder="検索">
-                </div>
             </div>
             <!--メニュー欄-->
             <nav :class="{ 'open': menuOpen }" @click="closeMenu">
