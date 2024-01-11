@@ -1,22 +1,21 @@
 <script setup>
-import { ref } from 'vue'
-import TodoText from '../components/TodoText.vue'
 const props = defineProps({
-  menuOpen: Boolean,
+  menuOpen: Boolean
 })
 </script>
 
 <template>
   <main :class="{ 'shift-right': menuOpen }">
     <div>
-      <h2>タスク</h2>
+      <h1>TODOリスト作ってみました!!!</h1>
+      <h1>頑張りました!!!</h1>
     </div>
-    <TodoText />
   </main>
 </template>
 
 <style scoped>
-h2 {
-  margin: 0;
+h1{
+  font-size: 100px;
+  text-align: center;
 }
 </style>

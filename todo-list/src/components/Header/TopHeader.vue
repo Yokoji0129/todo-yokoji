@@ -19,36 +19,14 @@ const props = defineProps({
                 <!--メニュー1-->
                 <RouterLink to="/" class="nav-link" :class="{ 'active-link': menuOpen && $route.path === '/' }">
                     <!--バーガーメニューが開かれているときだけactive-link スタイル適応-->
-                    <img src="../../assets/img/menu_ico/sun.png" class="img" width="15">
-                    今日の予定
-                    <span class="task-number">
-                        0
-                    </span>
-                </RouterLink>
-                <!--メニュー2-->
-                <RouterLink to="/important" class="nav-link"
-                    :class="{ 'active-link': menuOpen && $route.path === '/important' }">
-                    <img src="../../assets/img/menu_ico/star.png" class="img" width="15">
-                    重要
-                    <span class="task-number">
-                        0
-                    </span>
-                </RouterLink>
-                <!--メニュー3-->
-                <RouterLink to="/plan" class="nav-link" :class="{ 'active-link': menuOpen && $route.path === '/plan' }">
-                    <img src="../../assets/img/menu_ico/calendar-blank.png" class="img" width="15">
-                    今後の予定
-                    <span class="task-number">
-                        0
-                    </span>
-                </RouterLink>
-                <!--メニュー4-->
-                <RouterLink to="/all" class="nav-link" :class="{ 'active-link': menuOpen && $route.path === '/all' }">
                     <img src="../../assets/img/menu_ico/house.png" class="img" width="15">
                     タスク
-                    <span class="task-number">
-                        0
-                    </span>
+                </RouterLink>
+                <!--メニュー2-->
+                <RouterLink to="/yokoji" class="nav-link"
+                    :class="{ 'active-link': menuOpen && $route.path === '/yokoji' }">
+                    <img src="../../assets/img/menu_ico/star.png" class="img" width="15">
+                    開いて
                 </RouterLink>
             </nav>
         </header>
@@ -93,25 +71,6 @@ header {
     margin: 10px;
 }
 
-.search-box {
-    margin: 0 20px;
-}
-
-.search {
-    padding: 10px 200px 10px 5px;
-    border-radius: 10px;
-    border: none;
-    transition: 0.3s;
-}
-
-.search:hover {
-    background-color: #ebebeb;
-    transform: scale(1.02);
-}
-
-.search:focus {
-    outline: none;
-}
 
 .hamburger-icon,
 .hamburger-icon-menu {
@@ -150,13 +109,6 @@ nav {
 }
 
 .nav-link {
-    padding: 10px;
-    text-decoration: none;
-    color: black;
-    transition: 0.3s;
-}
-
-.nav-link-dark {
     padding: 10px;
     text-decoration: none;
     color: black;
