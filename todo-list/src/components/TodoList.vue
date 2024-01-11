@@ -288,7 +288,7 @@ const toggleMenuComp = (todoComp) => {
 
 <style scoped>
 nav {
-  padding: 15px;
+  padding: 10px;
   position: fixed;
   top: 60px;
   right: -330px;
@@ -306,7 +306,7 @@ nav {
   transition: 0.3s;
 }
 .heading-23 {
-  padding: 20px 10px;
+  padding: 15px 10px;
   width: 100%;
   border-left: 5px solid #2589d0;
   border-bottom: 3px solid #d2d2d2;
