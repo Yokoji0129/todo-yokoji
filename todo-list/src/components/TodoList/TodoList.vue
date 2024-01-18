@@ -157,6 +157,19 @@ const toggleCategory = ref(false)
 const toggleCategoryMenu = () => {
   toggleCategory.value = !toggleCategory.value;
 }
+
+const toggleCategoryRed = ref(false)
+const categoryRedBtn = () => {
+  toggleCategoryRed.value = !toggleCategoryRed.value;
+}
+const toggleCategoryBlue = ref(false)
+const categoryBlueBtn = () => {
+  toggleCategoryBlue.value = !toggleCategoryBlue.value;
+}
+const toggleCategoryGreen = ref(false)
+const categoryGreenBtn = () => {
+  toggleCategoryGreen.value = !toggleCategoryGreen.value;
+}
 </script>
 
 
@@ -189,16 +202,19 @@ const toggleCategoryMenu = () => {
         </li>
         <input class="memo" type="textearea" placeholder="メモの追加" v-model="memos[todo]"
           @keyup.enter="saveMemoToLocalStorage(todo)" />
-        <button @click="saveMemoToLocalStorage(todo)" style="cursor: pointer">
+        <button class="memo-btn" @click="saveMemoToLocalStorage(todo)">
           メモを保存
         </button>
         <!--カテゴリーメニュー-->
         <div>
+          <p class="category-red" v-if="toggleCategoryRed">Red Category<span class="category-btn">✕</span></p>
+          <p class="category-blue" v-if="toggleCategoryBlue">Blue Category<span class="category-btn">✕</span></p>
+          <p class="category-green" v-if="toggleCategoryGreen">Green Category<span class="category-btn">✕</span></p>
           <p class="category" @click="toggleCategoryMenu">カテゴリーを追加</p>
           <ul class="category-menu" v-if="toggleCategory">
-            <li>redcategory</li>
-            <li>bluecategory</li>
-            <li>greencategory</li>
+            <li @click="categoryRedBtn()"><p class="category-p-red">〇</p><span><p>Red Category</p></span></li>
+            <li @click="categoryBlueBtn()"><p class="category-p-blue">〇</p><span><p>Blue Category</p></span></li>
+            <li @click="categoryGreenBtn()"><p class="category-p-green">〇</p><span><p>Green Category</p></span></li>
           </ul>
         </div>
         <!--タスク完了ボタン-->
@@ -328,6 +344,11 @@ ul li {
   font-size: 16px;
 }
 
+.memo-btn{
+  margin-bottom: 15px;
+  cursor: pointer;
+}
+
 .btn {
   background-color: rgb(197, 255, 192);
   border-bottom: 3px solid #d2d2d2;
@@ -391,7 +412,7 @@ ul li {
   background-color: #ffffff;
   padding: 10px;
   cursor: pointer;
-  margin: 15px 0 0 0;
+  margin: 0;
 }
 
 .menu-comp-btn {
@@ -428,5 +449,51 @@ ul li {
 
 .menu-btn-delete:hover {
   background-color: rgb(219, 165, 165);
+}
+
+.category-red{
+  background-color: #fce9ea;
+  text-align: center;
+}
+
+.category-blue{
+  background-color: #e0f7fd;
+  text-align: center;
+}
+.category-green{
+  background-color: #e9f9e8;
+  text-align: center;
+}
+
+.category-btn{
+  cursor: pointer;
+  margin-left: 5px;
+}
+
+.category-menu{
+  background-color: #ffffff;
+  padding: 0;
+}
+
+.category-menu li{
+  margin: 0;
+  padding: 3px 5px;
+  display: flex;
+}
+.category-menu li:hover{
+  background-color: #f2f2f2;
+}
+
+.category-p-red{
+  color: red;
+  font-weight: bold;
+}
+.category-p-blue{
+  color: blue;
+  font-weight: bold;
+}
+.category-p-green{
+  color: green;
+  font-weight: bold;
 }
 </style>

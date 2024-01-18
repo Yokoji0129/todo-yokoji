@@ -9,7 +9,6 @@ const props = defineProps({
 const extractNewTodo = (todo) => {
   // todoの文字列が(/期日: (.+?)　(.+?)/)の正規表現とマッチしているかを検査
   const dateMatch = todo.match(/期日: (.+?)　(.+?)/);
-  console.log(dateMatch)
   return dateMatch ? dateMatch[2] : ''; // sateMatch[2]はnewTodoの文字部分
 };
 

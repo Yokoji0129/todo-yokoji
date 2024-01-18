@@ -1,6 +1,6 @@
 <script setup>
 import SortButton from "../TodoText/SortButton.vue";
-import TodoList from "../../components/TodoList/TodoList.vue"
+import TodoList from "../../components/TodoList/TodoList.vue";
 import { ref, computed } from "vue";
 const searchTerm = ref("");
 const newTodo = ref(""); // todoを追加する文字入れ
@@ -25,19 +25,12 @@ const saveTodoListCompToLocalStorage = () => {
 
 // todoを追加するメソッド
 const addTodo = () => {
-  if (newTodo.value) {
-    // 期日を入れた時と入れないときの分岐
-    if (selectDate.value) {
-      todoList.value.push("期日: " + selectDate.value + "　" + newTodo.value);
-      newTodo.value = "";
-      saveTodoListToLocalStorage();
-    } else {
-      todoList.value.push(newTodo.value);
-      newTodo.value = "";
-      saveTodoListToLocalStorage();
-    }
+  if (newTodo.value && selectDate.value) {
+    todoList.value.push("期日: " + selectDate.value + "　" + newTodo.value);
+    newTodo.value = "";
+    saveTodoListToLocalStorage();
   } else {
-    window.alert("todoを入力してください");
+    window.alert("todoと期日を入力してください");
   }
 };
 
@@ -69,13 +62,23 @@ const filteredTodoCompList = computed(() => {
 <template>
   <!--検索ボックス-->
   <div class="search-box">
-    <input class="search" type="text" placeholder="検索" v-model="searchTerm">
+    <input class="search" type="text" placeholder="検索" v-model="searchTerm" />
   </div>
   <!--ToDo入力欄-->
   <div class="text">
-    <input type="text" class="textbox-1" placeholder="タスクの追加" v-model="newTodo" @keyup.enter="addTodo" />
+    <input
+      type="text"
+      class="textbox-1"
+      placeholder="タスクの追加"
+      v-model="newTodo"
+      @keyup.enter="addTodo"
+    />
     <!--文字が入力されている場合cursor: pointer 入力されていない場合 cursor: not-alloweb-->
-    <button class="btn" :style="{ cursor: newTodo ? 'pointer' : 'not-allowed' }" @click="addTodo()">
+    <button
+      class="btn"
+      :style="{ cursor: newTodo ? 'pointer' : 'not-allowed' }"
+      @click="addTodo()"
+    >
       add
     </button>
   </div>
@@ -85,22 +88,22 @@ const filteredTodoCompList = computed(() => {
     <p class="sort" @click="toggleSortMenu()">↑↓並べ替え</p>
   </div>
   <!--ソート機能ボタン-->
-  <SortButton 
-   :todoList="todoList" 
-   :todoListComp="todoListComp" 
-   :showSortMenu="showSortMenu" 
+  <SortButton
+    :todoList="todoList"
+    :todoListComp="todoListComp"
+    :showSortMenu="showSortMenu"
   />
   <!--todoList一覧の部分-->
   <TodoList
-   :searchTerm="searchTerm"
-   :filteredTodoCompList="filteredTodoCompList" 
-   :filteredTodoList="filteredTodoList"
-   :todoList="todoList"
-   :todoListComp="todoListComp" 
-   :saveTodoListToLocalStorage="saveTodoListToLocalStorage"
-   :saveTodoListCompToLocalStorage="saveTodoListCompToLocalStorage"
-   @updateTodoList="updateTodoList"
-   @updateTodoListComp="updateTodoListComp"
+    :searchTerm="searchTerm"
+    :filteredTodoCompList="filteredTodoCompList"
+    :filteredTodoList="filteredTodoList"
+    :todoList="todoList"
+    :todoListComp="todoListComp"
+    :saveTodoListToLocalStorage="saveTodoListToLocalStorage"
+    :saveTodoListCompToLocalStorage="saveTodoListCompToLocalStorage"
+    @updateTodoList="updateTodoList"
+    @updateTodoListComp="updateTodoListComp"
   />
 </template>
 
@@ -156,12 +159,12 @@ const filteredTodoCompList = computed(() => {
   background-color: #ebebeb;
 }
 .date-sort {
-    display: flex;
+  display: flex;
 }
 
 .sort {
-    cursor: pointer;
-    margin: 5px 10px;
-    padding: 5px 10px;
+  cursor: pointer;
+  margin: 5px 10px;
+  padding: 5px 10px;
 }
 </style>
